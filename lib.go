@@ -19,6 +19,9 @@ func getStrListHash(strs []string) string {
 }
 
 func containInStringSlice(source []string, find string) (result bool) {
+	if len(source) < 1 {
+		return
+	}
 	sort.Strings(source)
 	index := sort.SearchStrings(source, find)
 	if source[index] == find {

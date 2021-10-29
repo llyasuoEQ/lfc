@@ -120,8 +120,9 @@ func (rs *RuleSet) WriteRedis(produceName string, input *Input) (err error) {
 		return
 	}
 	FastRecoverGoroutineFunc(func() {
-		// 设置key的过期时间
+		// set the expiration time of the key
 		rs.Expire(redisClient, redisKey)
+		// TODO delete member with certain probability
 	})
 	return
 }

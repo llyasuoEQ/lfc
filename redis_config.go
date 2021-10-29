@@ -19,7 +19,7 @@ type redisConfig struct {
 func (rc *redisConfig) newRedis() *RedisClient {
 	options := &redis.Options{
 		Addr:         rc.Address,
-		Password:     rc.Address,
+		Password:     rc.Password,
 		DB:           rc.DB,
 		PoolSize:     rc.PoolSize,
 		DialTimeout:  time.Duration(rc.DialTimeout) * time.Microsecond,

@@ -2,6 +2,7 @@ package lfc
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"sync"
 )
@@ -29,7 +30,8 @@ func newProductRule(productName string, ruleSets []RuleSet) *ProductRule {
 func (pr *ProductRule) FrequencyControl(input *Input) (result *MatchResult, err error) {
 	err = pr.writeRedis(input)
 	if err != nil {
-		log.Printf("write redis failed:%v\n", err)
+		err = fmt.Errorf("write redis failed:%v\n", err)
+		return
 	}
 	result, err = pr.readRedis(input)
 	return
@@ -89,19 +91,20 @@ func (pr *ProductRule) readRedis(input *Input) (result *MatchResult, err error) 
 			}
 		}
 	}
+	result = &MatchResult{Data: []MatchDetail{}}
 	return
 }
 
 func (pr *ProductRule) formatByFrequencyConfig(fc *Fconfig) (productRule *ProductRule, err error) {
 	if fc != nil {
-		// fields字段组合哈希
+		// fields hash
 		fHashMap := make(map[string][]string)
-		// 规则哈希
+		// rule hash
 		rHashMap := make(map[string]Rule)
-		// 字段哈希到规则哈希数组
+		// field to rule hash
 		fRuleHashMap := make(map[string][]string)
 		for _, item := range fc.Rules {
-			// 进行俩次排序
+			// sort
 			fields := item.getSortFields()
 			fieldsHash := getStrListHash(fields)
 			if len(fields) > 0 {
@@ -113,7 +116,7 @@ func (pr *ProductRule) formatByFrequencyConfig(fc *Fconfig) (productRule *Produc
 				}
 			}
 
-			// 将滑动窗口的时间字符串转为毫秒级时间 int64类型
+			// Convert sliding window to millisecond timestamp.
 			var period int64
 			period, err = timeStringToMilliSecond(item.Period)
 			if err != nil {

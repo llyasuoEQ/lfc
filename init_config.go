@@ -41,7 +41,7 @@ func InitConfig(tree *toml.Tree) (productRule *ProductRule, err error) {
 		globalRedisClient = globalFConfig.Redis.newRedis()
 
 		// formate config
-		_, err = globalProductRule.formatByFrequencyConfig(&globalFConfig)
+		productRule, err = globalProductRule.formatByFrequencyConfig(&globalFConfig)
 	})
 	return
 }

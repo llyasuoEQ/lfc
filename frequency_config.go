@@ -14,7 +14,7 @@ type Fconfig struct {
 type rules struct {
 	Name      string   `toml:"name" yaml:"name" json:"name"`
 	Period    string   `toml:"period" yaml:"period" json:"period"`
-	Threshold uint64   `toml:"threshold" yaml:"threshold" json:"threshold"`
+	Threshold int64    `toml:"threshold" yaml:"threshold" json:"threshold"`
 	Code      int64    `toml:"code" yaml:"code" json:"code"`
 	Fields    []string `toml:"fields" yaml:"fields" json:"fields"`
 }
