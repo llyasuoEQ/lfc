@@ -48,7 +48,6 @@ func TestFrequency(t *testing.T) {
 			Data: inputData,
 			Ts:   TimeStamp(),
 		}
-		// c276786284d0aec4a6f5090f3de4dc74
 		actual, err := productRule.FrequencyControl(input)
 		if err != nil {
 			t.Fatal(err)

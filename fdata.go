@@ -22,18 +22,6 @@ func (fcDataList *FcDataList) IsReachThreshold(threshold int64) (result bool) {
 	return
 }
 
-// rankByScoreDesc...
-// func rankByScoreDesc(data map[int64]interface{}) FcDataList {
-// 	result := make(FcDataList, len(data))
-// 	i := 0
-// 	for k, v := range data {
-// 		result[i] = FcData{k, v}
-// 		i++
-// 	}
-// 	sort.Sort(sort.Reverse(result))
-// 	return result
-// }
-
 // redisToFcData...  result read in redis is converted to FcDataList type
 func redisToFcData(zs []redis.Z) FcDataList {
 	result := make(FcDataList, len(zs))
