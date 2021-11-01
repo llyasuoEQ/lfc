@@ -112,10 +112,11 @@ func (rs *RuleSet) WriteRedis(produceName string, input *Input) (err error) {
 	}
 	scoreNumber := redis.Z{
 		Score:  float64(input.Ts),
-		Member: nil,
+		Member: input.Id,
 	}
 
 	err = rs.ZAdd(redisClient, redisKey, scoreNumber)
+	fmt.Println(redisKey, scoreNumber)
 	if err != nil {
 		return
 	}
@@ -123,6 +124,12 @@ func (rs *RuleSet) WriteRedis(produceName string, input *Input) (err error) {
 		// set the expiration time of the key
 		rs.Expire(redisClient, redisKey)
 		// TODO delete member with certain probability
+		if input.Ts % 100 < 20 {
+			errT := rs.ZRemByScore(redisKey, input.Ts)
+			if errT != nil {
+				log.Print(errT)
+			}
+		}
 	})
 	return
 }
@@ -164,4 +171,17 @@ func (rs *RuleSet) ReadRedis(productName string, inputData map[string]interface{
 	readRedisResult, err := redisClient.ZRevRangeByScoreWithScores(redisKey, zRangeBy).Result()
 	fcDataList = redisToFcData(readRedisResult)
 	return
+}
+
+func (rs *RuleSet) ZRemByScore(key string, ts int64) (err error) {
+	if rs == nil {
+		err = errors.New("RuleSet is nil")
+		return
+	}
+	upperBound := getLowerBound(ts, rs.maxPeriod)
+	redisClient, err := redisInstance()
+	if err != nil {
+		return
+	}
+	return redisClient.ZRangeByScore(key, redis.ZRangeBy{Min:"-1", Max:fmt.Sprint(upperBound)}).Err()
 }

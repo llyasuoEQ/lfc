@@ -1,6 +1,7 @@
 package lfc
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -44,10 +45,7 @@ func TestFrequency(t *testing.T) {
 	inputData["ip"] = "127.0.0.1"
 
 	for i := 0; i < 4; i++ {
-		input := &Input{
-			Data: inputData,
-			Ts:   TimeStamp(),
-		}
+		input := NewInput(inputData, SetTimeStampOption(TimeStamp()), SetIdOption(fmt.Sprint(TimeStamp())))
 		actual, err := productRule.FrequencyControl(input)
 		if err != nil {
 			t.Fatal(err)
