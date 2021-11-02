@@ -15,19 +15,20 @@ github.com/llyasuoEQ/lfc
 ````
 
 # Quickstart
-
 ## Write configuration
 ````
 configToml := `[frequency]
-         app_name = "test"
-         # 规则
-         # name: 规则名称，period：规定的时间，也就是滑动窗口的值，threshold：限制次数的阈值
-         # code：规则的返回值，fields：规则字段
+         app_name = "test" # 
+         # name: rule name，
+         # period：frequency control time
+         # threshold：how many times does it take effect
+         # code：hit code
+         # fields：rule field
          rules=[
-            {name="20秒限制3次",period=20,threshold=4,code=1001,fields=["phone","ip"]},
+            {name="『20s』limit【3】",period="20s",threshold=4,code=1001,fields=["phone","ip"]},
          ]
 
-         # 频控要依赖的redis的配置
+         # frequency control depends on the configuration of Redis
          [frequency.redis]
          address = "localhost:6379"
          password = ""

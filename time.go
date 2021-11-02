@@ -35,7 +35,7 @@ func convertTimeAccuracy(period int64) int64 {
 	return period * RATE
 }
 
-// timeStringToMilliSecond... 将时间字符串转为毫秒值
+// timeStringToMilliSecond...
 func timeStringToMilliSecond(ts string) (m int64, err error) {
 	// 字符串拆分
 	var numList []string

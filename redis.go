@@ -12,7 +12,7 @@ type RedisClient struct {
 	*redis.Client
 }
 
-// redisInstance...
+// redisInstance
 func redisInstance() (instance *redis.Client, err error) {
 	if globalRedisClient == nil {
 		err = errors.New("global redis client is nil")

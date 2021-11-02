@@ -11,15 +11,10 @@ import (
 const configToml = `
 [frequency]
  app_name = "test"
- # rule_name: rule name，
- # period：规定的时间，也就是滑动窗口的值
- # threshold：限制次数的阈值
- # code：规则的返回值，fields：规则字段
  rules=[
-		{name="20秒限制3次",period="20s",threshold=4,code=1000,fields=["uid","ip"]},
+		{name="「20s」limit【3】",period="20s",threshold=4,code=1000,fields=["uid","ip"]},
  ]
-
- # 频控要依赖的redis的配置
+ # redis config
  [frequency.redis]
  address = "localhost:6379"
  password = "123456"

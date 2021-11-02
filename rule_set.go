@@ -71,16 +71,16 @@ func (rs *RuleSet) prepareRedisKey(productName string, inputData map[string]inte
 	}
 	fcData := strings.Join(normalizedData, redis_key_inner_split)
 
-	//前缀:产品线:组合id:保留时长:fc数据
-	buf.WriteString(redis_key_prefix) //前缀
+	//pre:productName:fields:maxPeriod:inputData
+	buf.WriteString(redis_key_prefix)
 	buf.WriteString(redis_key_split)
-	buf.WriteString(productName) //产品线ID
+	buf.WriteString(productName)
 	buf.WriteString(redis_key_split)
-	buf.WriteString(rs.getCurrentFields()) //字段组合str ，当前ruleSet对应的Fields是排好序的
+	buf.WriteString(rs.getCurrentFields()) // sort field string
 	buf.WriteString(redis_key_split)
 	buf.WriteString(strconv.FormatInt(rs.maxPeriod, 10)) //最大保留时长
 	buf.WriteString(redis_key_split)
-	buf.WriteString(fcData) // 对应的字段value组合成的一段string
+	buf.WriteString(fcData)
 
 	// hash the key
 	result = getMd5Bytes(buf.Bytes())
@@ -123,7 +123,6 @@ func (rs *RuleSet) WriteRedis(produceName string, input *Input) (err error) {
 	FastRecoverGoroutineFunc(func() {
 		// set the expiration time of the key
 		rs.Expire(redisClient, redisKey)
-		// TODO delete member with certain probability
 		if input.Ts % 100 < 20 {
 			errT := rs.ZRemByScore(redisKey, input.Ts)
 			if errT != nil {
